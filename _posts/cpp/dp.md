@@ -230,31 +230,127 @@ void solve(){
 
 f 数组在允许的情况下，尽可能表示出所有参数
 
-```cpp
-//注意开long long
-int a[20],f[20][20][20];
+> [**AcWing1082. 数字游戏**](https://www.acwing.com/problem/content/1084/)
+>
+> 科协里最近很流行数字游戏。
+>
+> 某人命名了一种不降数，这种数字必须满足从左到右各位数字呈非下降关系，如 $123123$，$446446$。
+>
+> 现在大家决定玩一个游戏，指定一个整数闭区间 $[a,b]$，问这个区间内有多少个不降数。
+>
+> **注意：**不降数不能包含前导零。
+>
+> #### 输入格式
+>
+> 输入包含多组测试数据。
+>
+> 每组数据占一行，包含两个整数 $a$ 和 $b$。
+>
+> #### 输出格式
+>
+> 每行给出一组测试数据的答案，即 $[a,b]$ 之间有多少不降数。
 
-int dfs(int pos,int lead,int limit,int sum,int x){       //如果有次数，统计下来
-	if(pos==0) return sum;
-	if(!limit&&!lead&&f[pos][sum][x]!=-1) return f[pos][sum][x];
-	
-	int maxd=limit?a[pos]:9;
-	int ans=0;
-	for(int i=0;i<=maxd;i++){      //注意：枚举每一位数字，不要漏情况
-		int summ=sum;              //注意：summ对每个i应是独立的
-		if(x==0&&i==0&&!lead) summ++;
-		if(x!=0&&x==i) summ++;
-		ans+=dfs(pos-1,lead&&i==0,limit&&i==maxd,summ,x);    //limit&&i==maxd 改为 limit&&i==a[pos]
+时间复杂度 $O(T*10*log(r))$ 。
+
+```cpp
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+int a[20], tt;
+// f[i][j]:无限制，第i位没填数且前导数为j的情况下，有多少不降数。
+int f[20][20];
+
+// 当前是第pos位（未填数），是否是最高位：limit，前导数：pre。情况下的不降数。
+int dfs(int pos, int limit, int pre) {
+	if(pos == 0) return 1;
+	if(!limit && f[pos][pre] != -1) return f[pos][pre];
+
+	int maxd = limit ? a[pos] : 9;
+	int res = 0;
+	for(int i = 0; i <= maxd; i++) {
+		if(i < pre) continue;
+		if(limit && i == maxd) res += dfs(pos - 1, 1, i);
+		else res += dfs(pos - 1, 0, i);
 	}
-	
-	if(!limit&&!lead) f[pos][sum][x]=ans;
-	return ans;
+
+	if(!limit) f[pos][pre] = res;
+	return res;
+}
+
+int cal(int x) {
+	tt = 0;
+	while(x) {
+		a[++tt] = x % 10;
+		x /= 10;
+	}
+	return dfs(tt, 1, 0);
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int l, r;
+	memset(f, -1, sizeof f);
+	// 特判0
+	while(cin >> l >> r) {
+		cout << cal(r) - cal(l - 1) << "\n";
+	}
+	return 0;
 }
 ```
 
 ```cpp
 //如果取模的话
 cout<<(cal(r)-cal(l-1)+mod)%mod;
+```
+
+> [**洛谷P2602 [ZJOI2010] 数字计数**](https://www.luogu.com.cn/problem/P2602)
+>
+> 给定两个正整数 $a$ 和 $b$，求在 $[a,b]$ 中的所有整数中，每个数码（digit）各出现了多少次。
+
+```cpp
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+int a[100], tt;
+int f[15][70][70];
+
+int dfs(int pos, int limit, int lead, int x, int sum) {
+	if(pos == 0) return sum;
+	if(!limit && !lead && f[x][pos][sum] != -1) return f[x][pos][sum];
+
+	int maxd = limit ? a[pos] : 9;
+	int res = 0;
+	for(int i = 0; i <= maxd; i++) {
+//		cout << pos << " " << i << "\n";
+		if(lead && i == 0) res += dfs(pos - 1, limit && (i == maxd), 1, x, sum);
+		else res += dfs(pos - 1, limit && (i == maxd), 0, x, sum + (i == x));
+	}
+
+	if(!limit && !lead) f[x][pos][sum] = res;
+	return res;
+}
+
+int cal(int n, int x) {
+	tt = 0;
+	while(n) {
+		a[++tt] = n % 10;
+		n /= 10;
+	}
+	return dfs(tt, 1, 1, x, 0);
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int l, r;
+	memset(f, -1, sizeof f);
+	cin >> l >> r;
+	for(int i = 0; i <= 9; i++) {
+		cout << cal(r, i) - cal(l - 1, i) << " ";
+	}
+	return 0;
+}
 ```
 
 例题：
