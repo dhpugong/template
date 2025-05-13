@@ -516,18 +516,18 @@ void dfs2(int u,int fa){
 
 ![image-20250306201151694](../../images/image-20250306201151694.png)
 
-因此，设 $\mathrm{dp}(i, j)$ 表示将树 B 的结点 $1 \ldots i$ 放入新图，背包容量为 $j$ 时，所能取得的最大价值。设 $\operatorname{size}_i$ 表示以 $i$ 为根的子树的大小。
+因此，设 ${dp}(i, j)$ 表示将树 B 的结点 $1 \ldots i$ 放入新图，背包容量为 $j$ 时，所能取得的最大价值。设 $size_i$ 表示以 $i$ 为根的子树的大小。
 - 若取物品 $i$（前提是此时的背包容量放得下物品 $i$ ），则可以取它的子树，则
 
   - 问题转化为「将结点 $1 \ldots i-1$ 加入 $C$ ，且背包容量为 $j-1$ 时，所能取到的最大价值」加上物品 $i$ 的价值，
 
-  - 所以答案为 $\operatorname{dp}(i-1, j-1)+v_i$ ；
+  - 所以答案为 ${dp}(i-1, j-1)+v_i$ ；
 
 - 若不取物品 $i$ ，则不可以取它的子树，则
 
   - 问题转化为「将『结点 $1 \ldots i-1$ 中不属于 $i$ 的子树的结点』加入 $C$ ，背包容量不变时，所能取到的最大价值」
 
-  - 答案为 $\operatorname{dp}\left(i-\operatorname{size}_i, j\right)$ ；
+  - 答案为 ${dp}\left(i-{size}_i, j\right)$ ；
 
 
 综上可得 $\operatorname{dp}(i, j)=\left\{\begin{array}{ll}\max \left(\operatorname{dp}(i-1, j-1)+v_i, \operatorname{dp}\left(i-\operatorname{size}_i, j\right)\right) & j \geq w_i \\ \operatorname{dp}\left(i-\operatorname{size}_i, j\right) & j<w_i\end{array}\right.$ 。易证其时间复杂度为 $O(N M)$ 。
