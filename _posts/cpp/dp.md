@@ -250,7 +250,7 @@ f 数组在允许的情况下，尽可能表示出所有参数
 >
 > 每行给出一组测试数据的答案，即 $[a,b]$ 之间有多少不降数。
 
-时间复杂度 $O(T*10*log(r))$ 。
+时间复杂度 $O(T\times 10 log(r))$ 。
 
 ```cpp
 #include <bits/stdc++.h>
@@ -530,7 +530,7 @@ void dfs2(int u,int fa){
   - 答案为 ${dp}\left(i-{size}_i, j\right)$ ；
 
 
-综上可得 $\operatorname{dp}(i, j)=\left\{\begin{array}{ll}\max \left(\operatorname{dp}(i-1, j-1)+v_i, \operatorname{dp}\left(i-\operatorname{size}_i, j\right)\right) & j \geq w_i \\ \operatorname{dp}\left(i-\operatorname{size}_i, j\right) & j<w_i\end{array}\right.$ 。易证其时间复杂度为 $O(N M)$ 。
+综上可得 ${dp}(i, j)=\left\{\begin{array}{ll}\max \left({dp}(i-1, j-1)+v_i,{dp}\left(i-{size}_i, j\right)\right) & j \geq w_i \\ {dp}\left(i-{size}_i, j\right) & j<w_i\end{array}\right.$ 。易证其时间复杂度为 $O(N M)$ 。
 
 ```cpp
 int Size[500], id[500], cnt;
