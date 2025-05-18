@@ -256,6 +256,18 @@ cout << r->first << "\n";
 
 `unordered_map：`基于散列表，元素无序存储；大多数情况下其复杂度接近于 $O(1)$。
 
+```cpp
+using ULL = unsigned long long;
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+const ULL RANDOM = rng();
+struct Hsh {
+    ULL operator ()(const ULL& x)const {
+        return x ^ RANDOM;
+    }
+};
+unordered_map<ULL, ULL, Hsh> mp;
+```
+
 ## memset()
 
 可以初始化为 $-1，0，0x3f$

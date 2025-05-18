@@ -152,3 +152,44 @@ int num = 123;
 std::string str = to_string(num); // int -> string
 ```
 
+## manacher
+
+![image-20250516125347811](../../images/image-20250516125347811.png)
+
+![image-20250516125439073](../../images/image-20250516125439073.png)
+
+```cpp
+int get_d(string str) {
+    string s = "@#";
+    for (char c : str) s += c, s += '#';
+    s += '$';
+
+    int l = 0, r = 0, n = s.size();
+    vector<int> d(n);
+    for (int i = 1; i <= n - 2; i++) {
+        if (i <= r) d[i] = min(d[l + r - i], r - i + 1);
+        while (s[i - d[i]] == s[i + d[i]]) d[i]++;
+        if (i + d[i] - 1 > r) l = i - d[i] + 1, r = i + d[i] - 1;
+    }
+
+    return *max_element(d.begin(), d.end()) - 1;
+}
+```
+
+## `<ctype.h>` 库
+
+返回值为 `int` 。
+
+```
+isalpha(int c): 检查c是否为字母。
+isdigit(int c): 检查c是否为数字。
+isalnum(int c): 检查c是否为字母或数字。
+isupper(int c): 检查c是否为大写字母。
+islower(int c): 检查c是否为小写字母。
+```
+
+```
+tolower(int c): 将大写字母c转换为小写字母。
+toupper(int c): 将小写字母c转换为大写字母。
+```
+
