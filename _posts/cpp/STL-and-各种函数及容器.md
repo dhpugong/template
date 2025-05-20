@@ -1,14 +1,4 @@
----
-title: STL && 各种函数、容器
-mathjax: true
-math: true
-categories: # 分类
-  - c++板子  # 只能由一个
-tags: # 标签
-  - STL  # 能有多个
-  - 算法  # 一个标签一行
-  - c++
----
+[TOC]
 
 # Fragmented knowledge points+STL
 
@@ -257,6 +247,7 @@ cout << r->first << "\n";
 `unordered_map：`基于散列表，元素无序存储；大多数情况下其复杂度接近于 $O(1)$。
 
 ```cpp
+// 防卡
 using ULL = unsigned long long;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 const ULL RANDOM = rng();
@@ -266,6 +257,50 @@ struct Hsh {
     }
 };
 unordered_map<ULL, ULL, Hsh> mp;
+```
+
+```cpp
+// pair<int,int> 做键，方法1
+#include <functional>
+template <typename T>
+inline void hash_combine(std::size_t& seed, const T& val) {
+    seed ^= std::hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+// auxiliary generic functions to create a hash value using a seed
+template <typename T> inline void hash_val(std::size_t& seed, const T& val) {
+    hash_combine(seed, val);
+}
+template <typename T, typename... Types>
+inline void hash_val(std::size_t& seed, const T& val, const Types &... args) {
+    hash_combine(seed, val);
+    hash_val(seed, args...);
+}
+
+template <typename... Types>
+inline std::size_t hash_val(const Types &... args) {
+    std::size_t seed = 0;
+    hash_val(seed, args...);
+    return seed;
+}
+
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2>& p) const {
+        return hash_val(p.first, p.second);
+    }
+};
+
+//方法2
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator() (const std::pair<T1, T2>& p) const {
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+        return h1 ^ h2;
+    }
+};
+
+unordered_map<pair<int,int>, int, pair_hash> mp;
 ```
 
 ## memset()

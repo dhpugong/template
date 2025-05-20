@@ -1,14 +1,5 @@
----
-title: dp
-mathjax: true
-math: true
-categories: # 分类
-  - c++板子  # 只能由一个
-tags: # 标签
-  - dp  # 能有多个
-  - 算法  # 一个标签一行
-  - c++
----
+[TOC]
+
 # 动态规划
 
 <!-- more -->
